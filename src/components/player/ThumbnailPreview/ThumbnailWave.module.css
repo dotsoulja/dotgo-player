@@ -1,0 +1,18 @@
+.waveContainer {
+  position: absolute;
+  top: -80px;
+  height: 72px;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  opacity: 0; /* Default hidden */
+  transition: opacity 0.2s ease; /* Smooth fade */
+}
+
+.thumb {
+  position: absolute;
+  width: 128px;
+  height: 72px;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
