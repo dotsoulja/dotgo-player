@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import Hls from 'hls.js';
 import ThumbnailBloom from './ThumbnailPreview/ThumbnailBloom';
 import { useMediaMetadata } from './ThumbnailModal/useMediaMetadata';
+import IconButton from '../icons/IconButton';
 import styles from './VideoPlayer.module.css';
 
 interface VideoPlayerProps {
@@ -11,7 +12,7 @@ interface VideoPlayerProps {
 }
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inactivityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -19,8 +20,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
   const [hoverTime, setHoverTime] = useState<number | null>(null);
   const [isHoveringTimeline, setIsHoveringTimeline] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [timelineWidth, setTimelineWidth] = useState<number>(0);
-  const [currentTime, setCurrentTime] = useState<number>(0);
+  const [timelineWidth, setTimelineWidth] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
   const [isThumbnailVisible, setIsThumbnailVisible] = useState(false);
   const [isTimelineVisible, setIsTimelineVisible] = useState(true);
 
@@ -54,7 +55,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
       const hls = new Hls();
       hls.attachMedia(video);
       hls.on(Hls.Events.MEDIA_ATTACHED, () => hls.loadSource(src));
-      return () => hls.destroy();
+
+      return () => {
+        hls.destroy();
+      };
     }
   }, [src]);
 
@@ -99,7 +103,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
     setIsHoveringTimeline(true);
     setIsThumbnailVisible(true);
     setIsTimelineVisible(false);
-
     startInactivityTimer();
   };
 
@@ -120,15 +123,19 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
     const video = videoRef.current;
     if (time !== null && video) {
       video.currentTime = time;
-      if (video.paused) {
-        video.play();
-      }
+      if (video.paused) video.play();
     }
   };
 
   const handleFullscreen = () => {
     const wrapper = wrapperRef.current;
-    if (wrapper?.requestFullscreen) wrapper.requestFullscreen();
+    if (!wrapper) return;
+
+    if (wrapper.requestFullscreen) {
+      wrapper.requestFullscreen();
+    } else if ((wrapper as any).webkitRequestFullscreen) {
+      (wrapper as any).webkitRequestFullscreen();
+    }
   };
 
   const handlePlayPause = () => {
@@ -139,7 +146,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.playerWrapper} ref={wrapperRef}>
+      <div className={`${styles.playerWrapper} playerWrapper`} ref={wrapperRef}>
         <video
           ref={videoRef}
           poster={poster}
@@ -148,13 +155,19 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
           controls={false}
         />
 
-        <button onClick={handlePlayPause} className={styles.playPauseButton}>
-          {isPlaying ? '⏸️' : '▶️'}
-        </button>
+        <IconButton
+          icon={isPlaying ? 'pause' : 'play'}
+          onClick={handlePlayPause}
+          label={isPlaying ? 'Pause video' : 'Play video'}
+          className={styles.playPauseButton}
+        />
 
-        <button onClick={handleFullscreen} className={styles.fullscreenButton}>
-          ⛶
-        </button>
+        <IconButton
+          icon="fullscreen"
+          onClick={handleFullscreen}
+          label="Enter fullscreen"
+          className={styles.fullscreenButton}
+        />
 
         <div
           ref={timelineRef}

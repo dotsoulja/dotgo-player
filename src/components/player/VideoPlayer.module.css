@@ -46,27 +46,31 @@
   bottom: 0%;
   left: 0;
   width: 100%;
-  height: 80px;
-  background: rgba(39, 37, 37, 0.5);
+  height: 100px;
+  background: transparent;
   margin-top: 0px;
   cursor: pointer;
   z-index: 20;
 }
 
-
 /* Custom fullscreen button */
 .fullscreenButton {
   position: absolute;
-  bottom: 0%;
+  bottom: 8%;
   right: 0%;
   z-index: 30;
   background: transparent;
   border: none;
   color: white;
-  font-size: 2.5rem;
   padding: 0;
   cursor: pointer;
-  border-radius: 0px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease;
 }
 
 .playPauseButton {
@@ -76,20 +80,53 @@
   z-index: 30;
   background: transparent;
   border: none;
-  color: white;
-  font-size: 2.5rem;
-  padding: 0px;
-  border-radius: 0px;
+  color: rgb(249, 246, 246);
+  padding: 0;
   cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease;
 }
 
-.playPauseButton:hover {
-  background: rgba(255, 255, 255, 0.3);
+.playPauseButton:hover,
+.fullscreenButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
 }
 
+/* Icon inside buttons */
+.icon {
+  width: 32px;
+  height: 32px;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+/* Fullscreen-specific styles */
+.playerWrapper:fullscreen .playPauseButton,
+.playerWrapper:fullscreen .fullscreenButton {
+  width: 96px;
+  height: 96px;
+  bottom: 0%;
+}
+
+.playerWrapper:fullscreen .icon {
+  width: 48px;
+  height: 48px;
+}
+
+.playerWrapper:fullscreen .visualTimeline {
+  bottom: 0%;
+  height: 14px;
+}
+
+/* Timeline visualization */
 .visualTimeline {
   position: absolute;
-  bottom: 10%;
+  bottom: 5%;
   width: 100%;
   height: 10px;
   background-color: rgba(255, 255, 255, 0.2);
@@ -110,18 +147,7 @@
   transition: left 0.1s linear;
 }
 
-/* Fullscreen-specific styles */
-.playerWrapper:fullscreen .playPauseButton {
-  font-size: 5rem;
-  bottom: 0%;
-}
-
-.playerWrapper:fullscreen .fullscreenButton {
-  font-size: 5rem;
-  bottom: 0%;
-}
-
-.playerWrapper:fullscreen .visualTimeline {
-  bottom: 8%;
-  height: 14px;
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 5px rgba(69, 152, 240, 0.5); /* custom glow */
 }

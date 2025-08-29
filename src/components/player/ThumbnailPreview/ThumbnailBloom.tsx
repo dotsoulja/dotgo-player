@@ -56,7 +56,7 @@ const ThumbnailBloom: React.FC<ThumbnailBloomProps> = ({
         const left = (index * segmentLength / duration) * timelineWidth;
         const THUMB_WIDTH = 128; // defined in css
         const offsetLeft = left - THUMB_WIDTH / 2;
-        
+
         const isActive = index === hoveredIndex;
         const isExiting = exitingIndices.includes(index);
         const shouldGrow = isActive && isHoveringTimeline;
