@@ -1,0 +1,154 @@
+/* src/components/player/VideoPlayer.module.css */
+
+/* Fullscreen container with black background */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Wrapper to constrain player width and stack elements */
+.playerWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 960px;
+  padding: 1rem;
+  box-sizing: border-box;
+  border: 2px dashed rgba(0, 255, 255, 0.6);
+}
+
+/* Fullscreen override */
+.playerWrapper:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  padding: 0;
+  justify-content: center;
+}
+
+/* Responsive video element */
+.video {
+  width: 100%;
+  height: auto;
+  background-color: #000;
+  border-radius: 4px;
+}
+
+/* Timeline strip for hover interaction */
+.timeline {
+  position: absolute;
+  bottom: 0%;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: transparent;
+  margin-top: 0px;
+  cursor: pointer;
+  z-index: 20;
+}
+
+/* Custom fullscreen button */
+.fullscreenButton {
+  position: absolute;
+  bottom: 8%;
+  right: 0%;
+  z-index: 30;
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease;
+}
+
+.playPauseButton {
+  position: absolute;
+  bottom: 0%;
+  left: 0%;
+  z-index: 30;
+  background: transparent;
+  border: none;
+  color: rgb(249, 246, 246);
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease;
+}
+
+.playPauseButton:hover,
+.fullscreenButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* Icon inside buttons */
+.icon {
+  width: 32px;
+  height: 32px;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+/* Fullscreen-specific styles */
+.playerWrapper:fullscreen .playPauseButton,
+.playerWrapper:fullscreen .fullscreenButton {
+  width: 96px;
+  height: 96px;
+  bottom: 0%;
+}
+
+.playerWrapper:fullscreen .icon {
+  width: 48px;
+  height: 48px;
+}
+
+.playerWrapper:fullscreen .visualTimeline {
+  bottom: 0%;
+  height: 14px;
+}
+
+/* Timeline visualization */
+.visualTimeline {
+  position: absolute;
+  bottom: 5%;
+  width: 100%;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin-top: 12px;
+  border-radius: 3px;
+  overflow: hidden;
+  z-index: 10;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.progressMarker {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 2px;
+  background-color: #fff;
+  transition: left 0.1s linear;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 5px rgba(69, 152, 240, 0.5); /* custom glow */
+}

@@ -1,9 +1,8 @@
-// src/components/player/VideoPlayer.tsx
-
 import React, { useRef, useEffect, useState } from 'react';
 import Hls from 'hls.js';
+import ThumbnailBloom from './ThumbnailPreview/ThumbnailBloom';
 import { useMediaMetadata } from './ThumbnailModal/useMediaMetadata';
-import ControlBar from './ControlBar';
+import IconButton from '../icons/IconButton';
 import styles from './VideoPlayer.module.css';
 
 interface VideoPlayerProps {
@@ -16,6 +15,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const inactivityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [hoverTime, setHoverTime] = useState<number | null>(null);
   const [isHoveringTimeline, setIsHoveringTimeline] = useState(false);
@@ -23,6 +23,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
   const [timelineWidth, setTimelineWidth] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [isThumbnailVisible, setIsThumbnailVisible] = useState(false);
+  const [isTimelineVisible, setIsTimelineVisible] = useState(true);
 
   const { metadata } = useMediaMetadata(slug);
 
@@ -86,6 +87,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
     return percent * metadata.duration;
   };
 
+  const startInactivityTimer = () => {
+    if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
+    inactivityTimerRef.current = setTimeout(() => {
+      setIsThumbnailVisible(false);
+      setIsTimelineVisible(true);
+    }, 4000);
+  };
+
   const handleMouseMove = (e: React.MouseEvent) => {
     const time = getTimeFromClick(e.clientX);
     if (time === null) return;
@@ -93,12 +102,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
     setHoverTime(time);
     setIsHoveringTimeline(true);
     setIsThumbnailVisible(true);
+    setIsTimelineVisible(false);
+    startInactivityTimer();
   };
 
   const handleMouseLeave = () => {
     setHoverTime(null);
     setIsHoveringTimeline(false);
     setIsThumbnailVisible(false);
+    setIsTimelineVisible(true);
+
+    if (inactivityTimerRef.current) {
+      clearTimeout(inactivityTimerRef.current);
+      inactivityTimerRef.current = null;
+    }
   };
 
   const handleTimelineClick = (e: React.MouseEvent) => {
@@ -138,24 +155,48 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
           controls={false}
         />
 
-        <div className={styles.controlContainer}>
-          <ControlBar
-            isPlaying={isPlaying}
-            onPlayPause={handlePlayPause}
-            onFullscreen={handleFullscreen}
-            timelineRef={timelineRef}
-            handleMouseMove={handleMouseMove}
-            handleMouseLeave={handleMouseLeave}
-            handleTimelineClick={handleTimelineClick}
-            hoverTime={hoverTime}
-            metadata={metadata}
-            slug={slug}
-            timelineWidth={timelineWidth}
-            isThumbnailVisible={isThumbnailVisible}
-            isHoveringTimeline={isHoveringTimeline}
-            currentTime={currentTime}
-          />
+        <IconButton
+          icon={isPlaying ? 'pause' : 'play'}
+          onClick={handlePlayPause}
+          label={isPlaying ? 'Pause video' : 'Play video'}
+          className={styles.playPauseButton}
+        />
+
+        <IconButton
+          icon="fullscreen"
+          onClick={handleFullscreen}
+          label="Enter fullscreen"
+          className={styles.fullscreenButton}
+        />
+
+        <div
+          ref={timelineRef}
+          className={styles.timeline}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          onClick={handleTimelineClick}
+        >
+          {hoverTime !== null && metadata && isThumbnailVisible && (
+            <ThumbnailBloom
+              hoverTime={hoverTime}
+              metadata={metadata}
+              slug={slug}
+              timelineWidth={timelineWidth}
+              isHoveringTimeline={isHoveringTimeline}
+            />
+          )}
         </div>
+
+        {metadata && isTimelineVisible && (
+          <div className={styles.visualTimeline}>
+            <div
+              className={styles.progressMarker}
+              style={{
+                left: `${(currentTime / metadata.duration) * 100}%`,
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

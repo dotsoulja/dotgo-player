@@ -1,0 +1,102 @@
+/* src/components/player/ControlBar.module.css */
+
+.controlBar {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  box-sizing: border-box;
+  z-index: 25;
+  position: relative;
+}
+
+/* Play/Pause and Fullscreen buttons */
+.playPauseButton,
+.fullscreenButton {
+  position: absolute;
+  bottom: 0;
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease;
+  z-index: 30; /* 👈 ensures it's above the timeline */
+}
+
+.playPauseButton {
+  width: 64px;
+  height: 64px;
+  left: 0;
+}
+
+.fullscreenButton {
+  width: 28px;
+  height: 28px;
+  right: 0;
+}
+
+.playPauseButton:hover,
+.fullscreenButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* Fullscreen-specific styles */
+:fullscreen .playPauseButton,
+:fullscreen .fullscreenButton {
+  width: 96px;
+  height: 96px;
+  bottom: 0%;
+}
+
+:fullscreen .icon {
+  width: 48px;
+  height: 48px;
+}
+
+/* Timeline strip for hover interaction */
+.timeline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 80%;
+  background: transparent;
+  cursor: pointer;
+  z-index: 20;
+  box-sizing: border-box;
+  border: 2px dashed red;
+
+}
+
+/* Timeline visualization — now sits above control bar */
+.visualTimeline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  z-index: 15;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.progressMarker {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 2px;
+  background-color: #fff;
+  transition: left 0.1s linear;
+}

@@ -19,8 +19,11 @@
   align-items: center;
   width: 100%;
   max-width: 960px;
-  padding: 1rem;
+  aspect-ratio: 16 / 9;
   box-sizing: border-box;
+  padding-bottom: 20px;
+  border: 2px dashed rgba(0, 255, 255, 0.6);
+  margin: 0 auto;
 }
 
 /* Fullscreen override */
@@ -28,74 +31,22 @@
   width: 100vw;
   height: 100vh;
   max-width: none;
+  max-height: none;
   padding: 0;
-  justify-content: center;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  align-items: center;
+  padding-bottom: 20px;
 }
+
 
 /* Responsive video element */
 .video {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
   background-color: #000;
   border-radius: 4px;
-}
-
-/* Timeline strip for hover interaction */
-.timeline {
-  position: absolute;
-  bottom: 0%;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  background: transparent;
-  margin-top: 0px;
-  cursor: pointer;
-  z-index: 20;
-}
-
-/* Custom fullscreen button */
-.fullscreenButton {
-  position: absolute;
-  bottom: 8%;
-  right: 0%;
-  z-index: 30;
-  background: transparent;
-  border: none;
-  color: white;
-  padding: 0;
-  cursor: pointer;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease;
-}
-
-.playPauseButton {
-  position: absolute;
-  bottom: 0%;
-  left: 0%;
-  z-index: 30;
-  background: transparent;
-  border: none;
-  color: rgb(249, 246, 246);
-  padding: 0;
-  cursor: pointer;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 64px;
-  height: 64px;
-  transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease;
-}
-
-.playPauseButton:hover,
-.fullscreenButton:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
 }
 
 /* Icon inside buttons */
@@ -105,49 +56,27 @@
   transition: width 0.3s ease, height 0.3s ease;
 }
 
-/* Fullscreen-specific styles */
-.playerWrapper:fullscreen .playPauseButton,
-.playerWrapper:fullscreen .fullscreenButton {
-  width: 96px;
-  height: 96px;
-  bottom: 0%;
-}
-
 .playerWrapper:fullscreen .icon {
   width: 48px;
   height: 48px;
 }
 
-.playerWrapper:fullscreen .visualTimeline {
-  bottom: 0%;
-  height: 14px;
-}
-
-/* Timeline visualization */
-.visualTimeline {
-  position: absolute;
-  bottom: 5%;
-  width: 100%;
-  height: 10px;
-  background-color: rgba(255, 255, 255, 0.2);
-  margin-top: 12px;
-  border-radius: 3px;
-  overflow: hidden;
-  z-index: 10;
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-.progressMarker {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  width: 2px;
-  background-color: #fff;
-  transition: left 0.1s linear;
-}
-
 button:focus {
   outline: none;
-  box-shadow: 0 0 0 5px rgba(69, 152, 240, 0.5); /* custom glow */
+  box-shadow: 0 0 0 5px rgba(69, 152, 240, 0.5);
 }
+
+/* Control bar alignment */
+.controlContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: clamp(48px, 10vh, 96px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border: 2px dashed blue;
+  
+}
+
