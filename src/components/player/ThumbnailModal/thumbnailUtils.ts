@@ -6,7 +6,7 @@
 export const getThumbnailTimes = (duration: number, segmentLength: number): number[] => {
   const count = Math.floor(duration / segmentLength);
   const times = Array.from({ length: count }, (_, i) => Math.round(i * segmentLength));
-  console.log(`🧮 getThumbnailTimes: duration=${duration}s, segmentLength=${segmentLength}s → ${times.length} timestamps`);
+  // console.log(`🧮 getThumbnailTimes: duration=${duration}s, segmentLength=${segmentLength}s → ${times.length} timestamps`);
   return times;
 };
 

@@ -12,9 +12,10 @@
   position: relative;
 }
 
-/* Play/Pause and Fullscreen buttons */
+/* Icon buttons */
 .playPauseButton,
-.fullscreenButton {
+.fullscreenButton,
+.settingsButton {
   position: absolute;
   bottom: 0;
   background: transparent;
@@ -27,7 +28,7 @@
   align-items: center;
   justify-content: center;
   transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease;
-  z-index: 30; /* 👈 ensures it's above the timeline */
+  z-index: 30;
 }
 
 .playPauseButton {
@@ -42,17 +43,24 @@
   right: 0;
 }
 
+.settingsButton {
+  width: 28px;
+  height: 28px;
+  right: 40px; /* 👈 sits just left of fullscreen */
+}
+
 .playPauseButton:hover,
-.fullscreenButton:hover {
+.fullscreenButton:hover,
+.settingsButton:hover {
   background: rgba(255, 255, 255, 0.2);
   transform: scale(1.1);
 }
 
-/* Fullscreen-specific styles */
 :fullscreen .playPauseButton,
-:fullscreen .fullscreenButton {
-  width: 96px;
-  height: 96px;
+:fullscreen .fullscreenButton,
+:fullscreen .settingsButton {
+  width: 48px;
+  height: 48px;
   bottom: 0%;
 }
 
@@ -61,7 +69,11 @@
   height: 48px;
 }
 
-/* Timeline strip for hover interaction */
+:fullscreen .settingsButton {
+    right: 64px;
+}
+
+/* Timeline */
 .timeline {
   position: absolute;
   bottom: 0;
@@ -74,10 +86,8 @@
   z-index: 20;
   box-sizing: border-box;
   border: 2px dashed red;
-
 }
 
-/* Timeline visualization — now sits above control bar */
 .visualTimeline {
   position: absolute;
   top: 0;
@@ -99,4 +109,17 @@
   width: 2px;
   background-color: #fff;
   transition: left 0.1s linear;
+}
+
+.timelineTimer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 8px;
+  font-family: monospace;
+  color: #e0e0e0;
+  background: transparent;
+  pointer-events: none;
+  z-index: 35;
+  line-height: 1.2;
 }

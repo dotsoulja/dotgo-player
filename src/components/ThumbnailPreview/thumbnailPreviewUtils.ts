@@ -38,6 +38,6 @@ export const getSegmentThumbnailSrc = (
   const padded = String(seconds).padStart(3, '0');
   const filename = `thumb_${padded}.jpg`;
   const url = `http://localhost:8000/media/output/${slug}/thumbnails/${filename}`;
-  console.log(`🖼️ getSegmentThumbnailSrc: time=${segmentTime}s → ${filename} → ${url}`);
+  // console.log(`🖼️ getSegmentThumbnailSrc: time=${segmentTime}s → ${filename} → ${url}`);
   return url;
 };

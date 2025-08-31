@@ -1,6 +1,4 @@
-// src/components/player/ControlBar.tsx
-
-import React, { useRef, } from 'react';
+import React, { useRef } from 'react';
 import IconButton from '../icons/IconButton';
 import ThumbnailBloom from './ThumbnailPreview/ThumbnailBloom';
 import styles from './ControlBar.module.css';
@@ -10,6 +8,8 @@ interface ControlBarProps {
   isPlaying: boolean;
   onPlayPause: () => void;
   onFullscreen: () => void;
+  toggleSettings: () => void;
+  showSettings: boolean;
   timelineRef: React.RefObject<HTMLDivElement | null>;
   handleMouseMove: (e: React.MouseEvent) => void;
   handleMouseLeave: () => void;
@@ -21,12 +21,15 @@ interface ControlBarProps {
   isThumbnailVisible: boolean;
   isHoveringTimeline: boolean;
   currentTime: number;
+  handleVisualTimelineClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const ControlBar: React.FC<ControlBarProps> = ({
   isPlaying,
   onPlayPause,
   onFullscreen,
+  toggleSettings,
+  showSettings,
   timelineRef,
   handleMouseMove,
   handleMouseLeave,
@@ -38,6 +41,7 @@ const ControlBar: React.FC<ControlBarProps> = ({
   isThumbnailVisible,
   isHoveringTimeline,
   currentTime,
+  handleVisualTimelineClick,
 }) => {
   const markerRef = useRef<HTMLDivElement>(null);
 
@@ -65,6 +69,12 @@ const ControlBar: React.FC<ControlBarProps> = ({
     document.removeEventListener('mouseup', handleDragEnd);
   };
 
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   return (
     <div className={styles.controlBar}>
       <IconButton
@@ -79,6 +89,13 @@ const ControlBar: React.FC<ControlBarProps> = ({
         onClick={onFullscreen}
         label="Enter fullscreen"
         className={styles.fullscreenButton}
+      />
+
+      <IconButton
+        icon={showSettings ? 'settingsHide' : 'settings'}
+        onClick={toggleSettings}
+        label={showSettings ? 'Hide settings' : 'Show settings'}
+        className={styles.settingsButton}
       />
 
       <div
@@ -100,7 +117,10 @@ const ControlBar: React.FC<ControlBarProps> = ({
       </div>
 
       {metadata && (
-        <div className={styles.visualTimeline}>
+        <div
+          className={styles.visualTimeline}
+          onClick={handleVisualTimelineClick}
+        >
           <div
             ref={markerRef}
             className={styles.progressMarker}
@@ -109,6 +129,9 @@ const ControlBar: React.FC<ControlBarProps> = ({
             }}
             onMouseDown={handleDragStart}
           />
+          <div className={styles.timelineTimer}>
+            {formatTime(currentTime)} / {formatTime(metadata.duration)}
+          </div>
         </div>
       )}
     </div>
