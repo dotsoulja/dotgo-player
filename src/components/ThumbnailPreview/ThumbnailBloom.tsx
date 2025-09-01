@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './ThumbnailBloom.module.css';
-import { getSegmentThumbnailSrc } from '../../ThumbnailPreview/thumbnailPreviewUtils';
+import { getSegmentThumbnailSrc } from './thumbnailPreviewUtils';
 import type { MediaMetadata } from '../ThumbnailModal/useMediaMetadata';
 
 interface ThumbnailBloomProps {

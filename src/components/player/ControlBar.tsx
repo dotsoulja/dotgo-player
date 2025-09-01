@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import IconButton from '../icons/IconButton';
-import ThumbnailBloom from './ThumbnailPreview/ThumbnailBloom';
+import ThumbnailBloom from '../ThumbnailPreview/ThumbnailBloom';
 import styles from './ControlBar.module.css';
-import type { MediaMetadata } from './ThumbnailModal/useMediaMetadata';
+import type { MediaMetadata } from '../ThumbnailModal/useMediaMetadata';
 
 interface ControlBarProps {
   isPlaying: boolean;
@@ -21,6 +21,7 @@ interface ControlBarProps {
   isThumbnailVisible: boolean;
   isHoveringTimeline: boolean;
   currentTime: number;
+  isFullscreen: boolean;
   handleVisualTimelineClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
@@ -42,6 +43,7 @@ const ControlBar: React.FC<ControlBarProps> = ({
   isHoveringTimeline,
   currentTime,
   handleVisualTimelineClick,
+  isFullscreen,
 }) => {
   const markerRef = useRef<HTMLDivElement>(null);
 
@@ -85,9 +87,9 @@ const ControlBar: React.FC<ControlBarProps> = ({
       />
 
       <IconButton
-        icon="fullscreen"
+        icon={isFullscreen ? 'collapseFullscreen' : 'fullscreen'}
+        label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
         onClick={onFullscreen}
-        label="Enter fullscreen"
         className={styles.fullscreenButton}
       />
 

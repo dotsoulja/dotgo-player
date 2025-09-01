@@ -4,6 +4,7 @@ import PauseIcon from './PauseIcon';
 import FullscreenIcon from './FullscreenIcon';
 import SettingsIcon from './SettingsIcon';
 import SettingsHideIcon from './SettingsHideIcon';
+import CollapseFullscreenIcon from './CollapseFullscreenIcon';
 
 export const Icons = {
   play: PlayIcon,
@@ -11,4 +12,5 @@ export const Icons = {
   fullscreen: FullscreenIcon,
   settings: SettingsIcon,
   settingsHide: SettingsHideIcon,
+  collapseFullscreen: CollapseFullscreenIcon,
 };

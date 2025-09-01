@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Hls from 'hls.js';
-import ThumbnailBloom from './ThumbnailPreview/ThumbnailBloom';
-import { useMediaMetadata } from './ThumbnailModal/useMediaMetadata';
-import IconButton from '../icons/IconButton';
+import ThumbnailBloom from '../../src/components/ThumbnailPreview/ThumbnailBloom';
+import { useMediaMetadata } from '../../src/components/ThumbnailModal/useMediaMetadata';
+import IconButton from '../../src/components/icons/IconButton';
 import styles from './VideoPlayer.module.css';
 
 interface VideoPlayerProps {

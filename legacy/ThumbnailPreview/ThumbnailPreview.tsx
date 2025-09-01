@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styles from './ThumbnailPreview.module.css';
-import { getNearestSegmentTime, getSegmentThumbnailSrc } from './thumbnailPreviewUtils';
-import type { MediaMetadata } from '../player/ThumbnailModal/useMediaMetadata';
+import { getNearestSegmentTime, getSegmentThumbnailSrc } from '../../src/components/ThumbnailPreview/thumbnailPreviewUtils';
+import type { MediaMetadata } from '../../src/components/ThumbnailModal/useMediaMetadata';
 
 interface ThumbnailPreviewProps {
   hoverTime: number;

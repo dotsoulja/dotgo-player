@@ -1,5 +1,5 @@
 import type { RefObject } from 'react';
-import type { MediaMetadata } from '../ThumbnailModal/useMediaMetadata';
+import type { MediaMetadata } from '../../ThumbnailModal/useMediaMetadata';
 
 export const useVisualTimelineClick = (
     timelineRef: RefObject<HTMLDivElement | null>,

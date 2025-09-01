@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './ThumbnailWave.module.css';
-import { getSegmentThumbnailSrc } from '../../ThumbnailPreview/thumbnailPreviewUtils';
+import { getSegmentThumbnailSrc } from './thumbnailPreviewUtils';
 import type { MediaMetadata } from '../ThumbnailModal/useMediaMetadata';
 
 interface ThumbnailWaveProps {

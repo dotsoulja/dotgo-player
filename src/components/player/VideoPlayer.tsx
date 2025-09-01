@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Hls from 'hls.js';
-import { useMediaMetadata } from './ThumbnailModal/useMediaMetadata';
+import { useMediaMetadata } from '../ThumbnailModal/useMediaMetadata';
 import { useVisualTimelineClick } from './hooks/useVisualTimelineClick';
 import ControlBar from './ControlBar';
 import SettingsMenu from './SettingsMenu';
@@ -25,6 +25,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
   const [isThumbnailVisible, setIsThumbnailVisible] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [hlsInstance, setHlsInstance] = useState<Hls | null>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isIdle, setIsIdle] = useState(false);
+  const [lastMouseMove, setLastMouseMove] = useState(Date.now());
 
   const { metadata } = useMediaMetadata(slug);
 
@@ -49,6 +52,19 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
     return () => {
       window.removeEventListener('resize', updateWidth);
       document.removeEventListener('fullscreenchange', updateWidth);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+      console.log(`[UI] Fullscreen state updated: ${!!document.fullscreenElement}`);``
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
   }, []);
 
@@ -93,7 +109,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
       setIsPlaying(!video.paused);
       console.log(`[Playback] ${video.paused ? 'Paused' : 'Playing'} at ${video.currentTime.toFixed(2)}s`);
     };
-
     const updateCurrentTime = () => {
       setCurrentTime(video.currentTime);
     };
@@ -125,6 +140,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
+    setLastMouseMove(Date.now());
+    if (isIdle) setIsIdle(false);
+    
     const time = getTimeFromClick(e.clientX);
     if (time === null) return;
 
@@ -156,12 +174,21 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
     const wrapper = wrapperRef.current;
     if (!wrapper) return;
 
-    if (wrapper.requestFullscreen) {
-      wrapper.requestFullscreen();
-    } else if ((wrapper as any).webkitRequestFullscreen) {
-      (wrapper as any).webkitRequestFullscreen();
+    if (document.fullscreenElement) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if ((document as any).webkitExitFullscreen) {
+        (document as any).webkitExitFullscreen();
+      }
+      console.log(`[UI] Fullscreen exit requested.`);
+    } else {
+      if (wrapper.requestFullscreen) {
+        wrapper.requestFullscreen();
+      } else if ((wrapper as any).webkitRequestFullscreen) {
+        (wrapper as any).webkitRequestFullscreen();
+      }
+      console.log(`[UI] Fullscreen enter requested.`);
     }
-    console.log('[UI] Fullscreen requested on playerWrapper.');
   };
 
   const handlePlayPause = () => {
@@ -180,6 +207,17 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
     setShowSettings((prev) => !prev);
     console.log(`[UI] Settings menu ${!showSettings ? 'opened' : 'closed'}.`);
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = Date.now();
+      if (now - lastMouseMove > 2000) {
+        setIsIdle(true);
+      }
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [lastMouseMove]);
 
   return (
     <div className={styles.container}>
@@ -200,9 +238,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
             isPlaying={isPlaying}
             onPlayPause={handlePlayPause}
             onFullscreen={handleFullscreen}
+            isFullscreen={isFullscreen}
             timelineRef={timelineRef}
             handleMouseMove={handleMouseMove}
-           handleMouseLeave={handleMouseLeave}
+            handleMouseLeave={handleMouseLeave}
             handleTimelineClick={handleTimelineClick}
             hoverTime={hoverTime}
             metadata={metadata}
