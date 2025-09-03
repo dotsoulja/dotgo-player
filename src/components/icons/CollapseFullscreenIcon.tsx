@@ -4,7 +4,6 @@ const CollapseFullscreenIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) 
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 512 512"
-    fill="currentColor"
     {...props}
   >
     <polygon fill="#00B4D7" points="267.1,244.9 267.1,95.048 322.6,95.048 322.6,150.549 461.352,11.797 500.203,50.648 363.449,189.399 422.502,189.399 422.502,244.9" />

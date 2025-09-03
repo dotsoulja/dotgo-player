@@ -90,7 +90,7 @@ const ControlBar: React.FC<ControlBarProps> = ({
         icon={isFullscreen ? 'collapseFullscreen' : 'fullscreen'}
         label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
         onClick={onFullscreen}
-        className={styles.fullscreenButton}
+        className={`${styles.fullscreenButton} ${isFullscreen ? styles.zoomOutCursor : styles.zoomInCursor}`}
       />
 
       <IconButton

@@ -55,18 +55,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
     };
   }, []);
 
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
-      console.log(`[UI] Fullscreen state updated: ${!!document.fullscreenElement}`);``
-    };
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    };
-  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -100,6 +88,20 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
       console.warn('[HLS] HLS not supported in this environment.');
     }
   }, [src]);
+
+  useEffect(() => {
+   const handleFullscreenChange = () => {
+    const isNowFullscreen = !!document.fullscreenElement;
+    setIsFullscreen(isNowFullscreen);
+    console.log(`[UI] Fullscreen state updated: ${isNowFullscreen}`);
+   };
+
+   document.addEventListener('fullscreenchange', handleFullscreenChange);
+   return () => {
+    document.removeEventListener('fullscreenchange', handleFullscreenChange);
+   };
+ }, []);
+
 
   useEffect(() => {
     const video = videoRef.current;
@@ -171,25 +173,35 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
   };
 
   const handleFullscreen = () => {
-    const wrapper = wrapperRef.current;
-    if (!wrapper) return;
+  const wrapper = wrapperRef.current;
+  if (!wrapper) return;
 
-    if (document.fullscreenElement) {
+  const isFullscreenActive = !!document.fullscreenElement;
+
+  try {
+    if (isFullscreenActive) {
       if (document.exitFullscreen) {
         document.exitFullscreen();
       } else if ((document as any).webkitExitFullscreen) {
         (document as any).webkitExitFullscreen();
+      } else {
+        console.warn('[UI] No supported method to exit fullscreen.');
       }
-      console.log(`[UI] Fullscreen exit requested.`);
+      console.log('[UI] Fullscreen exit requested');
     } else {
       if (wrapper.requestFullscreen) {
         wrapper.requestFullscreen();
       } else if ((wrapper as any).webkitRequestFullscreen) {
         (wrapper as any).webkitRequestFullscreen();
+      } else {
+        console.warn('[UI] No supported method to enter fullscreen.');
       }
-      console.log(`[UI] Fullscreen enter requested.`);
+      console.log('[UI] Fullscreen enter requested');
     }
-  };
+  } catch (err) {
+    console.warn('[UI] Fullscreen toggle failed:', err);
+  }
+};
 
   const handlePlayPause = () => {
     const video = videoRef.current;
@@ -223,13 +235,16 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, poster, slug }) => {
     <div className={styles.container}>
       <div className={styles.playerWrapper} ref={wrapperRef}>
         <div className={styles.aspectBox}>
-          <div className={styles.videoFrameContainer}>
+          <div className={styles.videoFrameContainer}
+               onClick={handlePlayPause}
+          >
             <video
               ref={videoRef}
               poster={poster}
               className={styles.video}
               disablePictureInPicture
               controls={false}
+              onDoubleClick={handleFullscreen}
             />
           </div>
         </div>

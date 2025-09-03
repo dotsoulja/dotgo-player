@@ -64,3 +64,38 @@
     transition: transform .6s ease-in, opacity 1.2s ease-in;
 
 }
+
+/* Mobile Enhancements */
+
+@media (max-width: 600px) {
+  .bloomContainer {
+    top: 2%;
+    height: 56px;
+  }
+
+  .thumb {
+    width: 96px;
+    height: 56px;
+  }
+
+  .thumb.entering,
+  .thumb.exiting,
+  .thumb.hoverGrow {
+    transform: scale(1.2);
+  }
+
+  :global(.playerWrapper:fullscreen) .thumb {
+    width: 120px;
+    height: 72px;
+    transform: scale(1.4);
+  }
+
+  :global(.playerWrapper:fullscreen) .thumb.hoverGrow {
+    transform: scale(1.8);
+  }
+
+  :global(.playerWrapper:fullscreen) .thumb.entering,
+  :global(.playerWrapper:fullscreen) .thumb.exiting {
+    transform: scale(1.6);
+  }
+}

@@ -12,7 +12,6 @@ const buttonStyle: React.CSSProperties = {
   background: 'transparent',
   border: 'none',
   padding: 0,
-  cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',

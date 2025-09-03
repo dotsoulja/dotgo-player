@@ -75,7 +75,9 @@
   position: relative;
   width: 100%;
   height: 100%;
+  cursor: pointer;
 }
+
 
 .video {
   width: 100%;
@@ -121,3 +123,40 @@ button:focus {
   box-shadow: 0 0 0 5px rgba(69, 152, 240, 0.5);
 }
 
+
+/* Mobile enhancements */
+
+@media (max-width: 600px) {
+  .container {
+    height: 100svh;
+    padding: 0;
+  }
+
+  .playerWrapper {
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .aspectBox {
+    border: none;
+    aspect-ratio: auto;
+    height: 100%;
+  }
+
+  .controlContainer {
+    padding-top: 8px;
+    height: 64px;
+    max-width: 100%;
+    border: none;
+  }
+
+  .icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .playerWrapper:fullscreen .icon {
+    width: 32px;
+    height: 32px;
+  }
+}
